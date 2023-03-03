@@ -23,11 +23,5 @@ pipeline{
                                     allowEmptyArchive: true
             }
         }
-        stage('Archive the Artifects'){
-            steps{
-                junit testResults: '**/surefire-reports/TEST-*.xml',
-                allowEmptyArchive: false
-            }
-        }
     }
 }
