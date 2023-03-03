@@ -1,0 +1,23 @@
+pipeline{
+    agent none
+    stages{
+           stage('Version Control'){
+            agent { lable 'GIT' }
+            steps{
+                sh 'git --version'
+            }
+        }
+        stage('Create a Build'){
+            agent { lable 'MAVEN || MAVEN_JDK' }  
+            steps{
+                sh 'mvn --version'
+            }
+        }
+        stage('Deploy'){
+            agent { lable 'k8s && developer' }  
+            steps{
+                sh 'kubectl --version'
+            }
+        }
+    }
+}   
