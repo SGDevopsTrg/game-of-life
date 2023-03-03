@@ -4,4 +4,17 @@ node(){
             branch: 'jenkinsScriptedPipeline',
             poll: false
     }
+    stage('Create a Build'){
+        sh 'export PATH="/usr/lib/jvm/java-1.8.0-openjdk-amd64/bin:$PATH" && mvn package'
+    }
+    stage('Archive the Artifects'){
+        archiveArtifacts onlyIfSuccessful: true,
+            artifacts: '**/target/gameoflife.war',
+            allowEmptyArchive: true
+    }
+    stage('Show the TestResults'){
+        junit testResults: '**/surefire-reports/TEST-*.xml',
+              allowEmptyArchive: false,
+    }
 }
+        
