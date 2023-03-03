@@ -14,7 +14,7 @@ node(){
     }
     stage('Show the TestResults'){
         junit testResults: '**/surefire-reports/TEST-*.xml',
-              allowEmptyArchive: false,
+              allowEmptyArchive: false
     }
 }
         
