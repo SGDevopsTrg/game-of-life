@@ -1,0 +1,34 @@
+pipeline{
+    agent {label 'MAVEN_JDK8'}
+    triggers { cron('H/15 * * * *') }
+    stages{
+        stage('Version Control'){
+            steps{
+                git url: 'https://github.com/SGDevopsTrg/game-of-life.git',
+                    branch: 'jenkinsDeclarativePipeline',
+                    poll: false
+            }
+        }
+        stage('Create a Build'){
+            tools{
+                jdk 'JDK_8_UBUNTU'
+            }
+            steps{
+                sh 'mvn package'
+            }
+        }
+        stage('Archive the Artifects'){
+            steps{
+                archiveArtifacts artifacts: '**/target/gameoflife.war',
+                                onlyIfSuccessful: true,
+                                allowEmptyArchive: true
+            }
+        }
+        stage('Show the TestResults'){
+            steps{
+                junit testResults: '**/surefire-reports/TEST-*.xml',
+                allowEmptyResults: false
+            }
+        }
+    }
+}
