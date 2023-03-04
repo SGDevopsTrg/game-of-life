@@ -1,16 +1,16 @@
 pipeline{
-    agent none
+    agent {label 'MAVEN_JDK8'}
     stages{
         stage('Version Control'){
             steps{
                 git url: 'https://github.com/SGDevopsTrg/game-of-life.git',
-                branch: 'jenkinsScriptedPipeline',
-                poll: false
+                    branch: 'jenkinsDeclarativePipeline',
+                    poll: false
             }
         }
         stage('Create a Build'){
-            environment{
-                PATH="/usr/lib/jvm/java-1.8.0-openjdk-amd64/bin:$PATH"
+            tools{
+                jdk 'JDK_8_UBUNTU'
             }
             steps{
                 sh 'mvn package'
@@ -18,10 +18,14 @@ pipeline{
         }
         stage('Archive the Artifects'){
             steps{
-                archiveArtifacts onlyIfSuccessful: true,
-                                    artifacts: '**/target/gameoflife.war',
-                                    allowEmptyArchive: true
+                archiveArtifacts artifacts: '**/target/gameoflife.war',
+                                 onlyIfSuccessful: true,
+                                 allowEmptyArchive: true
             }
+        }
+        stage('Show the TestResults'){
+            junit testResults: '**/surefire-reports/TEST-*.xml',
+            allowEmptyArchive: false
         }
     }
 }
