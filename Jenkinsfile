@@ -26,7 +26,7 @@ pipeline{
         stage('Show the TestResults'){
             steps{
                 junit testResults: '**/surefire-reports/TEST-*.xml',
-                allowEmptyArchive: false
+                allowEmptyResults: false
             }
         }
     }
