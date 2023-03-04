@@ -24,8 +24,10 @@ pipeline{
             }
         }
         stage('Show the TestResults'){
-            junit testResults: '**/surefire-reports/TEST-*.xml',
-            allowEmptyArchive: false
+            steps{
+                junit testResults: '**/surefire-reports/TEST-*.xml',
+                allowEmptyArchive: false
+            }
         }
     }
 }
